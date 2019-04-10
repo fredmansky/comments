@@ -25,15 +25,7 @@ class Vote extends Model
     {
         return [
             [['id'], 'number', 'integerOnly' => true],
-            [['userId'], 'required', 'message' => Craft::t('comments', 'You must be logged in to vote.')],
             [['commentId'], 'required'],
-            [
-                'commentId',
-                'unique',
-                'targetAttribute' => ['userId', 'commentId', 'upvote', 'downvote'],
-                'targetClass' => VoteRecord::class,
-                'message' => Craft::t('comments', 'You can only vote on a comment once.')
-            ]
         ];
     }
     

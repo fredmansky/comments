@@ -17,7 +17,7 @@ class CommentsController extends Controller
     // Properties
     // =========================================================================
 
-    protected $allowAnonymous = ['actionSave'];
+    protected $allowAnonymous = ['actionSave', 'actionVote'];
 
 
     // Public Methods
@@ -181,16 +181,13 @@ class CommentsController extends Controller
 
     public function actionVote()
     {
-        $currentUser = Craft::$app->getUser()->getIdentity();
         $request = Craft::$app->getRequest();
 
         $upvote = $request->getParam('upvote');
         $downvote = $request->getParam('downvote');
         $commentId = $request->getParam('commentId');
 
-        $userId = $currentUser->id ?? null;
-
-        $vote = Comments::$plugin->getVotes()->getVoteByUser($commentId, $userId) ?? new Vote();
+        $vote = new Vote();
         $vote->commentId = $commentId;
 
         if ($upvote) {
@@ -212,9 +209,6 @@ class CommentsController extends Controller
                 $vote->upvote = null;
             }
         }
-
-        // Okay if no user here, although required, the model validation will pick it up
-        $vote->userId = $userId;
 
         if (!Comments::$plugin->getVotes()->saveVote($vote)) {
             if ($request->getAcceptsJson()) {
