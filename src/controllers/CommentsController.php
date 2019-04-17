@@ -131,8 +131,6 @@ class CommentsController extends Controller
                 'notice' => $notice,
             ]);
         }
-
-        return $this->redirectToPostedUrl();
     }
 
     public function actionFlag()
